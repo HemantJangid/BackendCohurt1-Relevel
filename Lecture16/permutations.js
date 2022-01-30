@@ -24,7 +24,7 @@ function swap(str, m, n) {
     str[n] = temp;
 }
 
-let arr = ['b', 'a', 'a'];
+let arr = ['a','b','a'];
 
 f(arr, 0);
 
