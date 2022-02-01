@@ -11,7 +11,7 @@ function fun() {
     for(let i = 0; i < n; i = i + j) {
         j = j + 1
         // some piece of code
-        console.log(i, j);
+        
     }
 }
 fun();
