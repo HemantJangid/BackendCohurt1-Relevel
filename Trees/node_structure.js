@@ -107,6 +107,97 @@ function levelOrder(root) {
     }
 }
 
+function levelOrderLevelWise(root) {
+    let qu = new Queue();
+    let null_node = new node(null);
+    qu.enqueue(root);
+    qu.enqueue(null_node);
+    let result = "";
+    while(!qu.isEmpty()) {
+        let curr = qu.dequeue();
+        if(curr.data == null) {
+            // this is the end of the last level; 
+            if(!qu.isEmpty()) {
+                qu.enqueue(new node(null));
+                result += "\n";
+            }
+        } else {
+            result += (curr.data + " ");
+        }
+        if(curr.left != null) {
+            qu.enqueue(curr.left);
+        }
+        if(curr.right != null) {
+            qu.enqueue(curr.right);
+        }
+    }
+    console.log(result);
+}
+
+function rightView(root) {
+    let qu = new Queue();
+    let null_node = new node(null);
+    qu.enqueue(root);
+    qu.enqueue(null_node);
+    let result = [];
+    while(!qu.isEmpty()) {
+        let curr = qu.dequeue();
+        if(curr.data == null) {
+            // this is the end of the last level; 
+            console.log(result[result.length - 1]); // last element
+            if(!qu.isEmpty()) {
+                qu.enqueue(new node(null));
+                result = [];
+            }
+        } else {
+            result.push(curr.data);
+        }
+        if(curr.left != null) {
+            qu.enqueue(curr.left);
+        }
+        if(curr.right != null) {
+            qu.enqueue(curr.right);
+        }
+    }
+}
+
+function rightViewOP1(root) {
+    let qu = new Queue();
+    let null_node = new node(null);
+    qu.enqueue(root);
+    qu.enqueue(null_node);
+    let last_element = undefined;
+    while(!qu.isEmpty()) {
+        let curr = qu.dequeue();
+        if(curr.data == null) {
+            // this is the end of the last level; 
+            console.log(last_element); // last element
+            if(!qu.isEmpty()) {
+                qu.enqueue(new node(null));
+            }
+        } else {
+            last_element = curr.data;
+        }
+        if(curr.left != null) {
+            qu.enqueue(curr.left);
+        }
+        if(curr.right != null) {
+            qu.enqueue(curr.right);
+        }
+    }
+}
+
+let maxLevelVisited = -1;
+function rightViewDFS(root, curr) {
+    if(root == null) return;
+    if(curr > maxLevelVisited) {
+        console.log(root.data);
+        maxLevelVisited = curr;
+    }
+    rightViewDFS(root.right, curr+1);
+    rightViewDFS(root.left, curr+1);
+}
+
 let root = new node(10);
 root.left = new node(20);
 root.right = new node(30);
@@ -123,4 +214,8 @@ console.log("*****");
 console.log(height(root));
 console.log(max_element(root));
 console.log(isMirror(root, root));
-levelOrder(root);
+levelOrderLevelWise(root);
+console.log("****");
+rightViewOP1(root);
+console.log("***");
+rightViewDFS(root, 0);
