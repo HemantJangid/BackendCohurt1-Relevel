@@ -198,6 +198,77 @@ function rightViewDFS(root, curr) {
     rightViewDFS(root.left, curr+1);
 }
 
+let sum_of_nodes = 0;
+function greaterSumTree(root) {
+    if(root == null) return;
+    greaterSumTree(root.right);
+    sum_of_nodes += root.data;
+    root.data = sum_of_nodes;
+    greaterSumTree(root.left);
+}
+
+let preorderIndex = 0;
+function search(inorder, l, r, data) {
+    for(let i = l; i <= r; i++) {
+        if(inorder[i] == data) return i;
+    }
+}
+function buildTree(preorder, inorder, l, r) {
+    if(l > r) return null;
+    let newNode = new node(preorder[preorderIndex]);
+    preorderIndex++;
+    let inorderIndex = search(inorder, l, r, newNode.data);
+    newNode.left = buildTree(preorder, inorder, l, inorderIndex-1);
+    newNode.right = buildTree(preorder, inorder, inorderIndex+1, r);
+    return newNode;
+}
+
+function findPath(root, x, arr) {
+   if(root==null) return false;
+   arr.push(root.data);
+   if(root.data == x) return true;
+   if(findPath(root.left, x, arr) || findPath(root.right, x, arr)) {
+       return true;
+   }
+   arr.pop();
+   return false;
+}
+
+let lca_ans = null;
+function lca(root, p, q) {
+    if(root == null) return 0;
+    let left = lca(root.left, p, q);
+    let right = lca(root.right, p, q);
+    let curr = (root.data == p || root.data == q);
+    if(curr + left + right >= 2 && lca_ans == null) {
+        lca_ans = root;
+    } 
+    return curr + left + right;
+}
+
+function is_bst(root) {
+    if(root == null) {
+        return {max: Number.MIN_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER, isBst: true};
+    }
+
+    let left = is_bst(root.left);
+    let right = is_bst(root.right);
+
+    if(left.isBst == true && right.isBst == true && root.data > left.max && root.data < right.min) {
+        return {
+            max: Math.max(left.max, right.max, root.data),
+            min: Math.min(left.min, right.min, root.data),
+            isBst: true
+        }
+    } else {
+        return {
+            max: Math.max(left.max, right.max, root.data),
+            min: Math.min(left.min, right.min, root.data),
+            isBst: false
+        }
+    }
+}
+
 let root = new node(10);
 root.left = new node(20);
 root.right = new node(30);
@@ -219,3 +290,20 @@ console.log("****");
 rightViewOP1(root);
 console.log("***");
 rightViewDFS(root, 0);
+console.log("*******")
+greaterSumTree(root);
+preorder(root);
+console.log("****");
+let pre = [3,9,20,15,7];
+let ino = [9,3,15,20,7];
+
+let treenode = buildTree(pre, ino, 0, pre.length-1);
+levelOrderLevelWise(treenode);
+postorder(treenode);
+let arr = [];
+findPath(treenode, 15, arr);
+
+lca(treenode, 9, 15);
+console.log("lca is", lca_ans.data);
+
+console.log(is_bst(treenode));
