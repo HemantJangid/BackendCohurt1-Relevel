@@ -12,7 +12,6 @@ class Hashtable {
         let prime = 5381;
         for(let i = 0; i < key.length; i++) {
             result = (result + (key.charCodeAt(i)*prime)%this.sizeOfHashtable)%this.sizeOfHashtable;
-            
             prime *= 5381;
         }
         return result;
@@ -62,6 +61,10 @@ class Hashtable {
                 return this.bucket[bi][i][1];
             }
         }
+    }
+
+    remove(key) {
+        // HW
     }
 
 }
