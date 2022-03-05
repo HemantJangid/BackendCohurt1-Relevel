@@ -269,6 +269,24 @@ function is_bst(root) {
     }
 }
 
+function is_balanced(root) {
+    if(root == null) return {height: 1, isBalanced: true};
+    let left_res = is_balanced(root.left);
+    let right_res = is_balanced(root.right);
+    let myHeight = Math.max(left_res.height, right_res.height) + 1;
+    if(left_res.isBalanced && right_res.isBalanced) {
+        // check height diff
+        let diff = left_res.height - right_res.height;
+        if(diff == 0 || diff == 1 || difd == -1) {
+            return {height: myHeight, isBalanced: true};
+        } else {
+            return {height: myHeight, isBalanced: false};
+        }
+    } else {
+        return {height: myHeight, isBalanced: false};
+    }
+}
+
 let root = new node(10);
 root.left = new node(20);
 root.right = new node(30);
